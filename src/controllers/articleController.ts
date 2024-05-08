@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ArticleInfoRequest } from "../types";
+import { ArticleInfo, ArticleInfoRequest } from "../types";
 import axios from "axios";
 
 export const searchArticles = async (req: Request, res: Response) => {
@@ -32,11 +32,25 @@ export const searchArticles = async (req: Request, res: Response) => {
     .join("&")}`;
 
   try {
-    const articleRes = await axios.get(fetch_data_url);
-    console.log(articleRes.data);
-  } catch (err) {
-    console.log("Error: ", err);
-  }
+    const articles: ArticleInfo[] = (await axios.get(fetch_data_url)).data
+      .articles;
 
-  res.status(200).send(fetch_data_url);
+    const filteredArticles = articles.filter((article: ArticleInfo) => {
+      if (
+        newReq.title &&
+        !article.title.toLowerCase().includes(newReq.title.toLowerCase())
+      )
+        return false;
+      if (
+        newReq.author &&
+        !article.source.name.toLowerCase().includes(newReq.author.toLowerCase())
+      )
+        return false;
+      return true;
+    });
+
+    res.status(200).send(filteredArticles.slice(0, newReq.counts));
+  } catch (err: any) {
+    res.status(err.status).send(err.body);
+  }
 };
