@@ -1,1 +1,1 @@
-export * as articleController from "./articleController";
+export * as articleController from "./article/articleController";
