@@ -7,6 +7,11 @@ export const searchArticles = async (req: Request, res: Response) => {
 
   const gnews_url = process.env.GNEWS_ENDPOINT;
   const q_api_key = `apikey=${process.env.GNEWS_API_KEY}`;
+  const q_category = newReq.category
+    ? `category=${newReq.category}`
+    : undefined;
+  const q_lang = newReq.lang ? `lang=${newReq.lang}` : undefined;
+  const q_country = newReq.country ? `country=${newReq.country}` : undefined;
 
   // const q_counts = `&max=${newReq.counts}`;
   const q_title = newReq.title ? `(${newReq.title})` : "";
@@ -14,15 +19,23 @@ export const searchArticles = async (req: Request, res: Response) => {
   const q_keywords = `(${newReq.keywords.split(", ").join(" OR ")})`;
 
   let q_query =
-    "&q=" + [q_title, q_author, q_keywords].filter(Boolean).join(" AND ");
+    "q=" + [q_title, q_author, q_keywords].filter(Boolean).join(" AND ");
 
-  const fetch_data_url = `${gnews_url}?${q_api_key}${q_query}`;
+  const fetch_data_url = `${gnews_url}?${[
+    q_api_key,
+    q_category,
+    q_lang,
+    q_country,
+    q_query,
+  ]
+    .filter(Boolean)
+    .join("&")}`;
 
   try {
     const articleRes = await axios.get(fetch_data_url);
-    console.log (articleRes.data);
+    console.log(articleRes.data);
   } catch (err) {
-    console.log ("Error: ", err);
+    console.log("Error: ", err);
   }
 
   res.status(200).send(fetch_data_url);
