@@ -3,6 +3,8 @@ import express, { NextFunction } from "express";
 import { Logger } from "./utils";
 import cors from "cors";
 import appRouter from "./routes";
+import { redisClient } from "./config";
+import { REDIS_FAIL, RUNNING_SERVER_FAIL, RUNNING_SERVER_SUCCESS } from "./consts/messages";
 
 dotenv.config();
 
@@ -17,8 +19,23 @@ app
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  Logger.info(`Server is running on Port ${PORT}.`);
+const redisSetup = async (next: NextFunction) => {
+  try {
+    await redisClient.connect();
+    next();
+  } catch (err) {
+    Logger.error(REDIS_FAIL, err);
+  }
+};
+
+redisSetup(() => {
+  try {
+    app.listen(PORT, () => {
+      Logger.info(RUNNING_SERVER_SUCCESS, PORT);
+    });
+  } catch (err) {
+    Logger.error(RUNNING_SERVER_FAIL, err);
+  }
 });
 
 export default app;

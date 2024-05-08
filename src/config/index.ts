@@ -1,3 +1,3 @@
 import { createClient } from "redis";
 
-export const redisClient = createClient({ url: "redis://127.0.0.1:6379" });
+export const redisClient = createClient({ url: "redis://redis-server:6379" });

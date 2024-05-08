@@ -9,7 +9,6 @@ export const searchArticles = async (req: Request, res: Response) => {
   const fetch_data_url = build_fetch_article_query(newReq);
   const cache_key = generate_cache_key(newReq);
 
-  await redisClient.connect();
   const cachedData = await redisClient.get(cache_key);
 
   if (cachedData) {
