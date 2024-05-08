@@ -1,4 +1,5 @@
 import { ArticleInfoRequest } from "../../types";
+import crypto from "crypto";
 
 export const build_fetch_article_query = (req: ArticleInfoRequest) => {
   const gnews_url = process.env.GNEWS_ENDPOINT;
@@ -25,4 +26,23 @@ export const build_fetch_article_query = (req: ArticleInfoRequest) => {
     .join("&")}`;
 
   return fetch_data_url;
+};
+
+export const generate_cache_key = (req: ArticleInfoRequest) => {
+  let countStr = req.counts.toString();
+
+  let data = [
+    req.title,
+    req.author,
+    req.keywords,
+    req.category,
+    req.lang,
+    req.country,
+  ]
+    .filter(Boolean)
+    .reduce((acc, val) => `${acc}${val}`, countStr);
+
+  const hasher = crypto.createHash("sha1");
+  hasher.update(String(data));
+  return hasher.digest("hex");
 };
