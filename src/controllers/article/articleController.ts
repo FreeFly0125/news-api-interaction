@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { ArticleInfo, ArticleInfoRequest } from "../../types";
-import axios from "axios";
 import { fetchArticles } from "../../services";
 import { build_fetch_article_query } from "./articleOperations";
 
