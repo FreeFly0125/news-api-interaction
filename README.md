@@ -4,9 +4,9 @@
 
 ### Project instructions
 
-Your task is to create a simple API that interacts with a public news API for fetching articles. For the back-end, you can use the language and framework of your choice. For example, you can use the [GNews API](https://gnews.io) and then create your own API service, with documentation, that interacts with this API for fetching articles.
+Create a simple API that interacts with a public news API for fetching articles. You can use the [GNews API](https://gnews.io) and then create your own API service, with documentation, that interacts with this API for fetching articles.
 
-Your API should have a few basic methods like, fetching N news articles, finding a news article with a specific title or author, and searching by keywords. Include a cache in your API service as well so users are not fetching the same things over and over.
+The API has a few basic methods like, fetching N news articles, finding a news article with a specific title or author, and searching by keywords. Included a cache in the API service as well so users are not fetching the same things over and over.
 
 ### Preparation
 
